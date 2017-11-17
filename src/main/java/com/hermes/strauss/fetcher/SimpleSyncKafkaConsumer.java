@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class SimpleSyncKafkaConsumer implements SyncFetcher<String, String> {
+public class SimpleSyncKafkaConsumer implements SyncConsumer<String, String> {
 
     private static final Logger log = LoggerFactory.getLogger(SimpleSyncKafkaConsumer.class);
     private final List<String> topic;
@@ -64,28 +64,4 @@ public class SimpleSyncKafkaConsumer implements SyncFetcher<String, String> {
         consumer.commitSync(lastRecord);
     }
 
-    //    @Override
-//    public void commitRecords(Consumer<String, String> consumer, ConsumerRecord<String, String> record) throws Exception {
-//        consumer.commitSync();
-//        if (records.isEmpty()) {
-//            log.warn("No message returned from kafka");
-//        } else if (asyncPartitions) {
-//            long start = System.currentTimeMillis();
-//            final List<List<ConsumerRecord<String, String>>> predicateStream = records.partitions().parallelStream()
-//                    .map(records::records).collect(Collectors.toList());
-//            if (asyncRecords) {
-//                predicateStream.parallelStream().forEach(System.out::println);
-//                log.info("FINISHED ASYNC PARTITIONS AND RECORDS = " + (System.currentTimeMillis() - start+ "ms"));
-//            } else {
-//                predicateStream.forEach(System.out::println);
-//                log.info("FINISHED ASYNC PARTITIONS = " + (System.currentTimeMillis() - start+ "ms"));
-//            }
-//        } else if (asyncRecords) {
-//            long start = System.currentTimeMillis();
-//            records.partitions()
-//                    .forEach(topicPartition -> records.records(topicPartition)
-//                            .parallelStream().forEach(System.out::println));
-//            log.info("FINISHED ASYNC RECORDS = " + (System.currentTimeMillis() - start) + "ms");
-//        }
-//    }
 }
