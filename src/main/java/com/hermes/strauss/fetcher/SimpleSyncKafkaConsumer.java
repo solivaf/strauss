@@ -29,7 +29,7 @@ public class SimpleSyncKafkaConsumer implements SyncFetcher<String, String> {
     public void run() {
         try {
             consumer.subscribe(topic);
-            log.info("Kafka Consumer susbcribed at topics {}", topic);
+            log.info("Kafka Consumer subscribed at topics {}", topic);
             final ConsumerRecords<String, String> consumerRecords = this.getRecords(consumer);
             final Map<TopicPartition, OffsetAndMetadata> lastRecords = this.processRecords(consumerRecords);
 
