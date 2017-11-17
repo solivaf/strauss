@@ -1,0 +1,18 @@
+strauss:
+  kafka:
+    consumer:
+      group.id: ${KAFKA_CONSUMER_GROUP:strauss-kafka}
+      client.id: ${KAFKA_CLIENT_ID:strauss-client}
+      bootstrap.servers: ${KAFKA_BROKERS:localhost:32768}
+      auto.offset.reset: ${KAFKA_AUTO_OFFSET_RESET:earliest}
+      auto.commit.interval.ms: ${KAFKA_AUTO_COMMIT_INTERVAL_MS:10000}
+      enable.auto.commit: ${KAFKA_AUTO_COMMIT_ENABLED:true}
+      heartbeat.interval.ms: ${KAFKA_HEARTBEAT_INTERVAL_MS:1000}
+      fetch.max.bytes: ${KAFKA_FETCH_MAX_BYTES:19216802}
+      max.poll.interval.ms: ${KAFKA_MAX_POLL_INTERVAL_MS:3000}
+      max.poll.records: ${KAFKA_MAX_POLL_RECORDS:1000}
+      topics: ${KAFKA_TOPIC:test}
+      consumers: ${KAFA_CONSUMERS:1}
+      async:
+        partitions: ${KAFKA_ASYNC_PARTITIONS:true}
+        records: ${KAFKA_ASYNC_RECORDS:true}
