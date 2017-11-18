@@ -1,5 +1,6 @@
 package com.hermes.strauss.fetcher;
 
+import com.hermes.strauss.config.KafkaConsumerConfig;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
@@ -18,13 +19,15 @@ public class SyncKafkaConsumer implements SyncConsumer<String, String> {
     private static final Logger log = LoggerFactory.getLogger(SyncKafkaConsumer.class);
     private final List<String> topic;
     private Consumer<String, String> consumer;
-    private Boolean processPartitionsAsync = Boolean.TRUE;
-    private Boolean processRecordsAsync = Boolean.TRUE;
-    private Boolean processRecordsAndPartitionsAsync = Boolean.TRUE;
+    private Boolean processPartitionsAsync = Boolean.FALSE;
+    private Boolean processRecordsAsync = Boolean.FALSE;
+    private Boolean processRecordsAndPartitionsAsync;
 
-    public SyncKafkaConsumer(Consumer<String, String> consumer, Properties consumerConfig) {
+    public SyncKafkaConsumer(Consumer<String, String> consumer, Properties consumerConfigProperties) {
         this.consumer = consumer;
-        this.topic = Arrays.asList(consumerConfig.get("topics").toString().split(","));
+        this.topic = Arrays.asList(consumerConfigProperties.get(KafkaConsumerConfig.TOPICS).toString().split(","));
+        this.processRecordsAsync = (Boolean) consumerConfigProperties.get(KafkaConsumerConfig.ASYNC_RECORDS);
+        this.processPartitionsAsync = (Boolean) consumerConfigProperties.get(KafkaConsumerConfig.ASYNC_PARTITIONS);
         this.processRecordsAndPartitionsAsync = processPartitionsAsync && processRecordsAsync;
     }
 
@@ -53,6 +56,9 @@ public class SyncKafkaConsumer implements SyncConsumer<String, String> {
             records.partitions().parallelStream()
                     .forEach(topicPartition -> records.records(topicPartition)
                             .forEach(cr -> lastOffset(lastRecords, topicPartition, cr.offset())));
+        } else if (processRecordsAsync) {
+            records.partitions().forEach(topicPartition -> records.records(topicPartition)
+                    .parallelStream().forEach(cr -> lastOffset(lastRecords, topicPartition, cr.offset())));
         } else {
             records.partitions().forEach(topicPartition -> records.records(topicPartition)
                     .forEach(cr -> lastOffset(lastRecords, topicPartition, cr.offset())));

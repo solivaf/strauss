@@ -1,5 +1,6 @@
 package com.hermes.strauss.app;
 
+import com.hermes.strauss.config.KafkaConsumerConfig;
 import com.hermes.strauss.fetcher.SimpleSyncKafkaConsumer;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.boot.CommandLineRunner;
@@ -20,9 +21,8 @@ public class SimpleKafkaConsumerInit implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        final Integer consumers = (Integer) consumerConfig.get("consumers");
-        ExecutorService executorService = Executors.newFixedThreadPool(consumers);
-
+        final Integer consumers = (Integer) consumerConfig.get(KafkaConsumerConfig.CONSUMERS_THREAD);
+        final ExecutorService executorService = Executors.newFixedThreadPool(consumers);
         for (int i = 0; i < consumers; i++) {
             executorService.execute(new SimpleSyncKafkaConsumer(new KafkaConsumer<>(consumerConfig), consumerConfig));
         }

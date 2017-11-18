@@ -8,7 +8,7 @@ import org.apache.kafka.common.TopicPartition;
 import java.util.HashMap;
 import java.util.Map;
 
-interface SyncConsumer<K, V> extends Runnable {
+interface SyncConsumer<K, V> extends com.hermes.strauss.fetcher.Consumer, Runnable {
 
     default ConsumerRecords<K, V> getRecords(Consumer<K, V> consumer) {
         return consumer.poll(Long.MAX_VALUE);

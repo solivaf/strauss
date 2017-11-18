@@ -1,9 +1,10 @@
 strauss:
   kafka:
     consumer:
+      type:
       group.id: ${KAFKA_CONSUMER_GROUP:strauss-kafka}
       client.id: ${KAFKA_CLIENT_ID:strauss-client}
-      bootstrap.servers: ${KAFKA_BROKERS:localhost:32768}
+      bootstrap.servers: ${KAFKA_BROKERS:localhost:32770}
       auto.offset.reset: ${KAFKA_AUTO_OFFSET_RESET:earliest}
       auto.commit.interval.ms: ${KAFKA_AUTO_COMMIT_INTERVAL_MS:10000}
       enable.auto.commit: ${KAFKA_AUTO_COMMIT_ENABLED:true}
@@ -16,3 +17,5 @@ strauss:
       async:
         partitions: ${KAFKA_ASYNC_PARTITIONS:true}
         records: ${KAFKA_ASYNC_RECORDS:true}
+  async:
+    max.threads: ${STRAUSS_MAX_THREADS:50}

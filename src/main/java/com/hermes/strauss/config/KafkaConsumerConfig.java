@@ -1,8 +1,6 @@
 package com.hermes.strauss.config;
 
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +10,11 @@ import java.util.Properties;
 
 @Configuration
 public class KafkaConsumerConfig {
+
+    public static final String TOPICS = "topics";
+    public static final String CONSUMERS_THREAD = "consumers.thread";
+    public static final String ASYNC_RECORDS = "async.records";
+    public static final String ASYNC_PARTITIONS = "async.partitions";
 
     private String groupId;
     private String brokers;
@@ -26,10 +29,6 @@ public class KafkaConsumerConfig {
     private Boolean asyncRecords;
     private Integer consumers;
     private String topics;
-
-    public Consumer<String, String> kafkaConsumer() {
-        return new KafkaConsumer<>(consumerConfig());
-    }
 
     @Bean
     public Properties consumerConfig() {
@@ -47,10 +46,10 @@ public class KafkaConsumerConfig {
         properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, maxPollInterval);
         properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);
 
-        properties.put("topics", topics);
-        properties.put("consumers", consumers);
-        properties.put("asyncRecords", asyncRecords);
-        properties.put("asyncPartitions", asyncPartitions);
+        properties.put(TOPICS, topics);
+        properties.put(CONSUMERS_THREAD, consumers);
+        properties.put(ASYNC_RECORDS, asyncRecords);
+        properties.put(ASYNC_PARTITIONS, asyncPartitions);
         return properties;
     }
 
@@ -113,8 +112,10 @@ public class KafkaConsumerConfig {
     public void setConsumers(Integer consumers) {
         this.consumers = consumers;
     }
+
     @Value("${strauss.kafka.consumer.topics}")
     public void setTopics(String topics) {
         this.topics = topics;
     }
+
 }
